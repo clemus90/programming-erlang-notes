@@ -40,5 +40,5 @@ pythag(N) ->
     ].
 
 % Anagrams
-perms([]) -> [[]]
-perms(L) -> [[H|T] || H <- L, T <- perms(L--[H])]
+perms([]) -> [[]];
+perms(L) -> [[H|T] || H <- L, T <- perms(L--[H])].
