@@ -1,0 +1,76 @@
+code:get_path() will provide the search paths where erlang looks for compiled modules
+
+- to add a path at the begining of the search path list use
+    code:add_patha(Dir)
+- to do it at the end
+    code:add_pathz(Dir)
+- list the loaded modules
+    coe:all_loaded()
+
+-this kind of commands should be included in a file called .erlang
+
+-adding parameters to the command line when running erl, will add Directories to the search path
+in the same way the previous functions do, uisng -pa and -pz respectively
+
+- init:get_argument(home) will tell you where erlang thinks your home is
+
+#Running programs
+
+##Compile and Run in the Erlang Shell
+
+erl
+c(hello).
+hello:start().
+
+##Quick scripting
+erl -eval 'io:format("Memory: ~p~n", [erlang:memory(total)]).' -noshell -s init stop
+
+##Compile and Run from the command prompt
+erlc hello.erl
+erl -noshell -s hello start -s init stop
+
+    see hello.sh to view a script that uses this technique
+    you'll need to add execution privileges to that file for it to work
+
+##Run as an escript
+    check the file hello to see how to create the executable file, just like the prev example
+    the file should be executable and can be ran like this
+
+    ./hello joe
+
+- -compile(export_all). will export every function in a modules
+
+-to pass command line arguments with either one of the last examples, you need to provide the parameters
+after the specified command
+
+erl -noshell -s fac1 main 25​ (for the first former)
+./factorial 25​ (for the latter)
+
+##Using makefiles
+
+ check the makefile template file
+
+ #Stopping Erlang
+
+  It might be difficult to do, since a number of things can cause a situation hard to exit.
+   - shell not responding
+   - ctrl c disabled
+   - erlang started in -detached modules
+   - erlang has been started with the -heart Cmd option, which makes it run again in case of crash
+ To make sure erlang has stopped, use ps in unix and try to kill it, in the latter case kill the heart before erlang itself
+
+- When the shell is unresponsive, Ctrl G will interrupt it and using the h command, you'll see the available commands
+
+- makefiles are error phrone, to whitespaces mostly
+
+- chicking the erl_crash.dump leads to understand why erlang fails when it does, if you start crshdump_viewer:start().
+    accessing to localhost:8888 will show the error dump in a web interface.
+
+##Accesing Man Pages
+    erl -man erl
+for individual modules
+    erl -man lists
+
+##Environment tweaking
+ all commands from the erlang shell are defined in a module called shell_default, to create your own, create a module called
+ user_default, and every function defined there will be accesible through the shell, without the module as a prefix

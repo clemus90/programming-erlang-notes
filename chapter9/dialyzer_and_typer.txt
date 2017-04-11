@@ -1,0 +1,8 @@
+- Building PLT
+ - dialyzer --build_plt --apps erts kernel stdlib
+
+- Check correctness of a module a.erl
+ - dialyzer a.erl
+
+- To check the types in a module a.erl
+ - typer a.erl
