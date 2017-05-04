@@ -32,6 +32,10 @@ Pid ! Message
 - Send _Message_ to process with identifier _Pid_ asynchronously 
 
 ```
-receive ... end
+receive 
+    Pattern1 [when Guard1] ->
+        Expressions1;
+    Pattern2 
+end
 ```
 
