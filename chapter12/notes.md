@@ -35,7 +35,40 @@ Pid ! Message
 receive 
     Pattern1 [when Guard1] ->
         Expressions1;
-    Pattern2 
+    Pattern2 [when Guard2] ->
+        Expressions2;
+    ...
 end
 ```
+- when a message arrives a receive statement, the message is matched agains the patterns in order, and optionally some guards
+- when a message doesn't match with any clause, it is saved for later
+- the mailbox that receives the messages is also created when a process is spawned
+- the returned value from ! is the same message
 
+## Introducing Client Server
+- in erlang, the client and server are processes
+- client server interaction requires that the server receives the address of the client in order to reply the message
+```
+Pid ! {self(), {rectangle, 6, 10}}
+```
+- the following is the code that receives the message
+```
+loop() ->
+    receive
+        {From, {rectangle, Width, Ht}} ->
+            From ! Width * Ht,
+            loop();
+        ...
+```
+- is recommended to always respond to a client, even when the message is not processed by the logic of the receive
+- the following is the abstraction of an RPC
+```
+rpc(Pid, Request) ->
+    Pid ! {self(), Request}
+    receive
+        Response ->
+            Response
+    end
+```
+- view the file area_server1.erl to check the whole thing
+- to verify the source, include the Pid of the Server in the response `From ! {self(), ...}`
