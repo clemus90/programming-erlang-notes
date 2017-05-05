@@ -39,3 +39,4 @@
 - `link(Pid)`
 - `unlink(Pid)`
 - `erlang:monitor(process, Item)`, Item is the Pid of the process to monitor
+- `spec demonitor(Ref)`
