@@ -72,3 +72,39 @@ rpc(Pid, Request) ->
 ```
 - view the file area_server1.erl to check the whole thing
 - to verify the source, include the Pid of the Server in the response `From ! {self(), ...}`
+## Processes Are Cheap
+- `erlang:system_info(process_limit)` gets the maximum allowd processes
+- testing the creation of 20.000 processes with a core i7 at 2.9GHz per core takes 3 microseconds using `processes.erl`
+- to modify the ammount of maximum processes you ned to use the `+P` flag when running erlang.
+
+## Receive with a timeout
+- we can add a timeout to the receive statement in order to avoid deadlocks
+```
+receive
+    Pattern1 [when Guard1] ->
+        Expressions1;
+    Pattern2 [when Guard2] ->
+        Expressions2;
+    ...
+    after Time ->
+        Expressions
+    end
+```
+- if no matching message has arrived within __Time__ milliseconds, then the process stop waiting and evaluates __Expressions__
+- you can define a receive only with after
+- you can define a timeout of 0 milliseconds to flush the unwanted messages, the match clauses are tried before the timeout
+## Selective receiver
+- when a message is not matched, it is placed in a save queue, after the timeout is passed, the messages are put back in the message queue
+## Registered Processes
+- when a process is created only the parent knows about the existence of it, but there are means of registering a process, so it is accessible from other processes without the need of introduction
+- the following are the bifs related to this process
+    - register(AnAtom, Pid)
+    - unregister(AnAtom)
+    - whereIs(AnAtom) -> Pid | undefined
+        - finds out whether a process is registered or not
+    - registered() -> [AnAtom::atom()]
+        - a list of all registered processes
+## A World About Tail Recursion
+- if the last statement is a recursion, it is represented as a jump, so there is no stack consumption
+## Spawning with MFAs or Funs
+- spawning with an MFA is the way to ensure the code updrage mechanism
