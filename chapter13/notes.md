@@ -39,4 +39,15 @@
 - `link(Pid)`
 - `unlink(Pid)`
 - `erlang:monitor(process, Item)`, Item is the Pid of the process to monitor
-- `spec demonitor(Ref)`
+- `demonitor(Ref)`
+- `exit(Why)`, causes the current Process to exit with reason __Why__
+- `exit(Pid, Why)`, kills the Process with __Pid__
+
+## Programming for Fault Tolerance
+The functions referenced in this section are located in the module __lib\_misc__
+- `on_exit(Pid, Fun)`
+    - monitor process with __Pid__ and performs __Fun__ when it dies
+- `start(Fs)`
+    - receives a list of functions on __Fs__ and spawn and link to them, if any of them die, the rest die as well, if we want to know when will this happen, we use the Pid returned by this and monitore it with _on\_exit_
+- `keep_alive(Name, Fun)`
+    - spawn a Process with __Fun__ and registered it to __Name__, if the process dies, a monitor action will spawn the process again with the same __Fun__ and same __Name__
